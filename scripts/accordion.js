@@ -16,6 +16,7 @@
             var $this = $(this),
                 $li = $this.children('li'),
                 $hash = (window.location.hash === '#') ? null : $this.find(window.location.hash),
+                currentURL = window.location.pathname.replace(/\.ht.*/g, ''),
                 i,
                 setPanelWidth = function () {
                     $li.children('ul, div').each(function () {
@@ -74,12 +75,28 @@
             }).wrap('<span />');
 
             $li.children('a, span').each(function () {
-                var $label = $(this);
+                var $label = $(this),
+                    $sibling = $label.next('ul,div');
 
                 // if the `a` or `span` is a link instead of a label, return
-                if ($label.next('ul, div').length < 1) {
+                if ($sibling.length < 1) {
+
+                    // mark the label as active if it links to the current page
+                    if ($label.attr('href').replace(/\.ht.*/g, '') === currentURL) {
+                        $label.addClass('active');
+                    }
                     return;
                 }
+
+                // open the dropdown if a child links to the current page
+                $sibling.find('a').each(function () {
+                    var $link = $(this);
+
+                    if ($link.attr('href').replace(/\.ht.*/g, '') === currentURL) {
+                        $link.addClass('active');
+                        $label.click();
+                    }
+                });
 
                 // each label that expands an accordion panel should be given a special class
                 $label.addClass(settings.labelClass);
