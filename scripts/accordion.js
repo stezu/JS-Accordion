@@ -76,7 +76,7 @@
 
             $li.children('a, span').each(function () {
                 var $label = $(this),
-                    $sibling = $label.next('ul,div');
+                    $sibling = $label.next('ul, div');
 
                 // if the `a` or `span` is a link instead of a label, return
                 if ($sibling.length < 1) {
@@ -94,7 +94,8 @@
 
                     if ($link.attr('href').replace(/\.ht.*/g, '') === currentURL) {
                         $link.addClass('active');
-                        $label.click();
+                        $label.parent().addClass('expanded');
+                        $sibling.css('display', 'block');
                     }
                 });
 
@@ -111,8 +112,8 @@
                 // toggle the expanded/collapsed panel on click
                 $label.on('click', function () {
                     // collapse the panel if it is currently visible
-                    if ($label.next('ul, div').is(':visible')) {
-                        $label.next('ul, div').slideUp(function () {
+                    if ($sibling.is(':visible')) {
+                        $sibling.slideUp(function () {
                             $(document).trigger('panelCollapsed');
                         });
                         $label.parent().removeClass('expanded');
@@ -122,13 +123,12 @@
                             $li.filter('.expanded').removeClass('expanded')
                                 .children('ul:visible, div:visible').slideUp();
                         }
-                        $label.next('ul, div').slideDown(function () {
+                        $sibling.slideDown(function () {
                             $(document).trigger('panelExpanded');
                         });
                         $label.parent().addClass('expanded');
                     }
                 });
-
             });
         });
     };
