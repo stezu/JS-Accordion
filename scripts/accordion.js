@@ -16,7 +16,7 @@
             var $this = $(this),
                 $li = $this.children('li'),
                 $hash = (window.location.hash === '#') ? null : $this.find(window.location.hash),
-                currentURL = window.location.pathname.replace(/\.ht.*/g, ''),
+                currentURL = window.location.href.replace(/\.html?$/, ''),
                 i,
                 setPanelWidth = function () {
                     $li.children('ul, div').each(function () {
@@ -82,7 +82,7 @@
                 if ($sibling.length < 1) {
 
                     // mark the label as active if it links to the current page
-                    if ($label.attr('href').replace(/\.ht.*/g, '') === currentURL) {
+                    if ($label.get(0).href.replace(/\.html?$/, '') === currentURL) {
                         $label.addClass('active');
                     }
                     return;
@@ -92,7 +92,7 @@
                 $sibling.find('a').each(function () {
                     var $link = $(this);
 
-                    if ($link.attr('href').replace(/\.ht.*/g, '') === currentURL) {
+                    if ($link.get(0).href.replace(/\.html?$/, '') === currentURL) {
                         $link.addClass('active');
                         $label.parent().addClass('expanded');
                         $sibling.css('display', 'block');
